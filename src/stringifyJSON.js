@@ -38,13 +38,25 @@ var stringifyJSON = function(obj) {
       break;
       
     case "object":
+      var string;
       if(Array.isArray(obj)) {
-        var string;
         for(var i = 0; i < obj.length; i++){
-          string += obj[i] + " ";
+          if(i < obj.length - 1) {
+            string += obj[i] + ",";
+          } else {
+            string += obj[i];
+          }
         }
-      } else if(obj == null) {
+        //ensures that object is returned in its form [..]
+        return "[" + string + "]";
+        
+      } else if(obj === null) {
         return "null";
+        
+      } else{ //the last is key-value pair
+        for(var key in obj) {
+          string += key + ":" obj[key] + "," ;
+        } return "{" + string + "}";
       }
       
   }
