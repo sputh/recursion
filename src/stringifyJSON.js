@@ -3,33 +3,49 @@
 
 // but you don't so you're going to write it from scratch:
 
-//First thing JSON.stringify() does is convert a value to JSON
-var stringifyJSON = function(obj) {
-  // your code goes here
-  /*var string;
-  if(obj.typeof() == 'num') {
-      string = obj;
-  } else if(obj.typeof() == 'obj') {
-      for(var key in obj) {
-          string += key + " " + obj[key];
-      }
-  } else if(obj.typeof() == 'array') {
-      for(var i = 0; i < obj.length; i++) {
-          if(i != obj.length -1) {
-              string += obj[i] + " ";
-          } else {
-              string += obj[i]
-          }
-      }
-  } 
-  else if(obj.typeof() == 'boolean') {
-      if(obj == 'true') {
-          return string = "true";
-      } else {
-          return string = "false";
-      }
-  }
-  return string;*/
-  return obj.stringifyJSON();
+// hint: JSON does not allow you to stringify functions or
+// undefined values, so you should skip those key/value pairs.
 
+//JSON works on (1)numBER (2) strings (3) boolean 
+//(4) objects--key-value pairs or arrays 
+
+//JSON doesn't work on (1) undefined (2) functions
+
+//creating a function for recursion
+
+var stringifyJSON = function(obj) {
+  switch(typeof(obj))
+  {
+    case "number":
+      return obj.toString();
+      break;
+    
+    case "string":
+      return '\"' + obj + '\"';   //ensures that obj is returned in "quotes"
+      break;
+    
+    case "boolean":
+      return obj.toString();
+      break;
+    
+    //Before moving to objects, tackle the easier options -- undefined(s)  
+    case "undefined":
+      return undefined;
+      break;
+    
+    case "function":
+      return undefined;
+      break;
+      
+    case "object":
+      if(Array.isArray(obj)) {
+        var string;
+        for(var i = 0; i < obj.length; i++){
+          string += obj[i] + " ";
+        }
+      } else if(obj == null) {
+        return "null";
+      }
+      
+  }
 };
