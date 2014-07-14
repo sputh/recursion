@@ -20,17 +20,16 @@ var stringifyJSON = function(obj) {
       return obj.toString();
       break;
     
-    case "string":
-      return '\"' + obj + '\"';   //ensures that obj is returned in "quotes"
+    case "undefined":
+      return undefined;
       break;
     
     case "boolean":
       return obj.toString();
       break;
     
-    //Before moving to objects, tackle the easier options -- undefined(s)  
-    case "undefined":
-      return undefined;
+    case "string":
+      return '\"' + obj + '\"';   //ensures that obj is returned in "quotes"
       break;
     
     case "function":
@@ -38,26 +37,41 @@ var stringifyJSON = function(obj) {
       break;
       
     case "object":
-      var string;
-      if(Array.isArray(obj)) {
+      var string = '';
+      //It's clearer if I placed the code for a null case first
+      if(obj == null) {
+        return "null";
+        
+      } else if (Array.isArray(obj)) {
         for(var i = 0; i < obj.length; i++){
           if(i < obj.length - 1) {
-            string += obj[i] + ",";
+            string += stringifyJSON(obj[i]) + ",";
           } else {
-            string += obj[i];
+            string += stringifyJSON(obj[i]);
           }
         }
         //ensures that object is returned in its form [..]
         return "[" + string + "]";
         
-      } else if(obj === null) {
-        return "null";
-        
       } else{ //the last is key-value pair
+        var index = 0;
         for(var key in obj) {
-          string += key + ":" obj[key] + "," ;
+          var keyString = stringifyJSON(obj[key]);
+          if(keyString !== '' && keyString !== undefined) {
+            //Adding each element one by one because jumbling them together kept
+            //giving me an error
+            
+            if (index > 0) {
+              string += ",";
+            }
+            
+            string += "\"" + key + "\"";
+            string += ":" ;
+            string += keyString;
+            
+          }index ++;
         } return "{" + string + "}";
-      }
-      
+      } 
+      break;
   }
 };
