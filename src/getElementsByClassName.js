@@ -14,17 +14,30 @@ var getElementsByClassName = function(className){
   //returns an array-like object of ALL child elements which
   //have all the given class names, searching thru the whole 
   //doc or element
-  var result = []; //the collection of all child elements to be returned
-  //var classes = [];
-  var currentElement = document.body;
-  var children = currentElement.childNodes;
   
-  for(var i = 0; i < children.length; i++){
-    var list = children[i].classList;
-    for(var j = 0; j < list.length; i++) {
-      if (list[j] == className) {
-        result.push(children[i]);
+  var result = [];
+  //need to create a recursive function because I don't know how nested the 
+  //class may be
+  
+  var getElements = function(nodes){ //doc.body
+    if (nodes !== undefined) {
+      var classList = nodes.classList;  //grabs all the classes
+      var children = nodes.childNodes;
+      if(nodes.length) {
+        for(var i = 0; i < nodes.length; i++) {
+          if(nodes[i].classList !== undefined) {
+            getElements(nodes[i]);
+          }
+        }
+      } else{
+        if(classList) {
+          if(classList.contains(className)) {
+            result.push(nodes);
+          }
+        } getElements(children);
       }
     }
-  return result;  
+  }; 
+  getElements(document.body);
+  return result;
 };
