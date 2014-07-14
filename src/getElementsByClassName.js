@@ -14,22 +14,17 @@ var getElementsByClassName = function(className){
   //returns an array-like object of ALL child elements which
   //have all the given class names, searching thru the whole 
   //doc or element
-  var collected = []; //the collection of all child elements to be returned
-  var classes = [];
+  var result = []; //the collection of all child elements to be returned
+  //var classes = [];
   var currentElement = document.body;
   var children = currentElement.childNodes;
   
   for(var i = 0; i < children.length; i++){
-    if(children[i].className && children[i].className !== '') {
-      classes = children[i].className.split('');
-      
-      classes.forEach(function(singleClass){
-        if(singleClass === className) {
-          collected.push(children[i]);
-        }
-      });
+    var list = children[i].classList;
+    for(var j = 0; j < list.length; i++) {
+      if (list[j] == className) {
+        result.push(children[i]);
+      }
     }
-    collected = collected.concat(Document.prototype.getElementsByClassName.call(this, className, children[i]));
-  }
-  return collected;
+  return result;  
 };
